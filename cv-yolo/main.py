@@ -5,6 +5,7 @@ if __name__ == '__main__':
     net = cv2.dnn.readNet("net/yolov3.weights", "net/yolov3.cfg")
     with open("net/coco.names", "r") as f:
         classes = [line.strip() for line in f.readlines()]
+    colors = np.random.uniform(0, 255, size=(len(classes), 3))
     layer_names = net.getLayerNames()
     output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
     print('-- net loaded --')
@@ -43,7 +44,6 @@ if __name__ == '__main__':
                     class_ids.append(class_id)
 
         indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
-        colors = np.random.uniform(0, 255, size=(len(classes), 3))
         for i in range(len(boxes)):
             if i in indexes:
                 x, y, w, h = boxes[i]
